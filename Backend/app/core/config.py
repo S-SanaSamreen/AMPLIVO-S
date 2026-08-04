@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -120,6 +120,15 @@ class Settings(BaseSettings):
     # Log requests that take longer than this threshold (milliseconds) at INFO
     # level instead of DEBUG.
     SLOW_REQUEST_THRESHOLD_MS: int = 1000
+
+    @model_validator(mode="after")
+    def validate_production_settings(self) -> "Settings":
+        if self.ENVIRONMENT.lower() == "production":
+            if self.JWT_SECRET_KEY == "CHANGE_ME_IN_PRODUCTION":
+                raise ValueError("JWT_SECRET_KEY must be changed in production!")
+            if self.DB_SSL_MODE != "require":
+                raise ValueError("DB_SSL_MODE must be 'require' in production!")
+        return self
 
 
 @lru_cache

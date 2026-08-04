@@ -1,28 +1,39 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { isAxiosError } from 'axios';
 import { ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react';
 import { Logo } from '@/components/ui/Logo';
+import { authService } from '@/services/authService';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    
+    setError(null);
     setIsSubmitting(true);
-    // Simulate network request
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await authService.forgotPassword(email);
       setIsSubmitted(true);
-    }, 1500);
+    } catch (err: unknown) {
+      if (isAxiosError<{ detail?: string; message?: string }>(err)) {
+        const msg = err.response?.data?.message || err.response?.data?.detail;
+        setError(msg || 'Unable to send reset link. Please try again.');
+      } else {
+        setError('Network error. Please check your connection and try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-[#F8F9FA]">
+    <main id="main-content" className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-[#F8F9FA]">
       {/* Vibrant Premium Background Mesh */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] max-w-[800px] max-h-[800px] bg-gradient-to-br from-[#4C1D95]/40 to-[#7C3AED]/40 rounded-full blur-[100px]" />
@@ -54,15 +65,23 @@ export default function ForgotPasswordPage() {
         </div>
 
         {!isSubmitted ? (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {error && (
+              <div role="alert" aria-live="assertive" className="bg-red-50 text-red-600 text-[13px] px-3 py-2 rounded-lg border border-red-100">
+                {error}
+              </div>
+            )}
             <div className="space-y-1">
-              <label className="block text-[13px] font-medium text-slate-700">Email <span className="text-red-500">*</span></label>
+              <label htmlFor="forgot-email" className="block text-[13px] font-medium text-slate-700">Email <span className="text-red-500" aria-hidden="true">*</span></label>
               <input
+                id="forgot-email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@company.com"
+                autoComplete="email"
+                aria-required="true"
                 className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4C1D95] focus:border-[#4C1D95] transition-shadow shadow-sm"
               />
             </div>
@@ -94,6 +113,4 @@ export default function ForgotPasswordPage() {
         )}
 
       </div>
-    </div>
-  );
-}
+    </main>

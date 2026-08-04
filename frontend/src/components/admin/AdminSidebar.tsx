@@ -121,7 +121,7 @@ export function AdminSidebar() {
           onClick={() => setSidebarOpen(false)}
         />
       )}
-      <aside className={`
+      <aside id="admin-sidebar" className={`
         fixed md:sticky top-0 left-0 z-50 h-screen w-64 flex-shrink-0 bg-[#111827] flex flex-col overflow-hidden
         transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
@@ -266,9 +266,12 @@ export function AdminHeader({ title, subtitle, badge, actions }: AdminHeaderProp
       <div className="flex items-center gap-3 min-w-0">
         <button 
           onClick={toggleSidebar}
+          aria-label="Toggle navigation menu"
+          aria-expanded={isSidebarOpen}
+          aria-controls="admin-sidebar"
           className="md:hidden text-slate-500 hover:text-slate-900 focus:outline-none shrink-0"
         >
-          <Menu size={20} />
+          <Menu size={20} aria-hidden="true" />
         </button>
         <div className="min-w-0">
           <h1 className="text-base md:text-lg font-bold text-slate-900 truncate" style={{ fontFamily: "'Sora', sans-serif" }}>{title}</h1>
@@ -285,9 +288,11 @@ export function AdminHeader({ title, subtitle, badge, actions }: AdminHeaderProp
         <div className="relative" ref={ref}>
           <button
             onClick={() => setOpen((o) => !o)}
+            aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}
+            aria-expanded={open}
             className="relative w-9 h-9 rounded-[10px] bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors"
           >
-            <Bell size={17} />
+            <Bell size={17} aria-hidden="true" />
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#EC4899] text-white text-[9px] font-bold flex items-center justify-center">
                 {unreadCount > 9 ? '9+' : unreadCount}

@@ -23,7 +23,7 @@ const variants: Record<Variant, string> = {
   primary: 'bg-[#4C1D95] text-white hover:bg-[#3b1574] shadow-sm',
   secondary: 'bg-[#7C3AED] text-white hover:bg-[#6d31d4]',
   outline: 'border border-[#4C1D95] text-[#4C1D95] hover:bg-[#4C1D95]/5',
-  ghost: 'text-[#4C1D95] hover:bg-[#4C1D95]/8',
+  ghost: 'text-[#4C1D95] hover:bg-[#4C1D95]/10',
   white: 'bg-white text-[#4C1D95] hover:bg-white/90 shadow-lg shadow-black/15',
   danger: 'bg-red-500 text-white hover:bg-red-600',
 };

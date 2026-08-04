@@ -151,13 +151,13 @@ export default function ContactPage() {
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                     {error && (
-                      <div className="flex items-start gap-2.5 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
-                        <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+                      <div role="alert" aria-live="assertive" className="flex items-start gap-2.5 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl">
+                        <AlertCircle size={16} className="flex-shrink-0 mt-0.5" aria-hidden="true" />
                         {error}
                       </div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name <span className="text-red-500">*</span></label>
                         <input
@@ -221,17 +221,17 @@ export default function ContactPage() {
                         className={`w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4C1D95]/20 focus:border-[#4C1D95] bg-white ${fieldErrors.service_interest ? 'border-red-300' : 'border-slate-200'}`}
                       >
                         <option value="">Select a service...</option>
-                        <option>Social Media Marketing</option>
-                        <option>Performance Marketing</option>
-                        <option>SEO</option>
-                        <option>Branding & Creative</option>
-                        <option>Content Marketing</option>
-                        <option>Lead Generation</option>
-                        <option>Website Development</option>
-                        <option>Marketing Automation</option>
-                        <option>Influencer Marketing</option>
-                        <option>Video Marketing</option>
-                        <option>Full-Service Package</option>
+                        <option value="social_media_marketing">Social Media Marketing</option>
+                        <option value="performance_marketing">Performance Marketing</option>
+                        <option value="seo">SEO</option>
+                        <option value="branding_creative">Branding &amp; Creative</option>
+                        <option value="content_marketing">Content Marketing</option>
+                        <option value="lead_generation">Lead Generation</option>
+                        <option value="website_development">Website Development</option>
+                        <option value="marketing_automation">Marketing Automation</option>
+                        <option value="influencer_marketing">Influencer Marketing</option>
+                        <option value="video_marketing">Video Marketing</option>
+                        <option value="full_service">Full-Service Package</option>
                       </select>
                       {fieldErrors.service_interest && <p className="text-red-500 text-xs mt-1">{fieldErrors.service_interest}</p>}
                     </div>
@@ -245,11 +245,11 @@ export default function ContactPage() {
                         className={`w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4C1D95]/20 focus:border-[#4C1D95] bg-white ${fieldErrors.budget_range ? 'border-red-300' : 'border-slate-200'}`}
                       >
                         <option value="">Select budget...</option>
-                        <option>₹25,000 – ₹50,000</option>
-                        <option>₹50,000 – ₹1,00,000</option>
-                        <option>₹1,00,000 – ₹2,50,000</option>
-                        <option>₹2,50,000 – ₹5,00,000</option>
-                        <option>₹5,00,000+</option>
+                        <option value="25k_50k">&#8377;25,000 &#8211; &#8377;50,000</option>
+                        <option value="50k_100k">&#8377;50,000 &#8211; &#8377;1,00,000</option>
+                        <option value="100k_250k">&#8377;1,00,000 &#8211; &#8377;2,50,000</option>
+                        <option value="250k_500k">&#8377;2,50,000 &#8211; &#8377;5,00,000</option>
+                        <option value="500k_plus">&#8377;5,00,000+</option>
                       </select>
                       {fieldErrors.budget_range && <p className="text-red-500 text-xs mt-1">{fieldErrors.budget_range}</p>}
                     </div>

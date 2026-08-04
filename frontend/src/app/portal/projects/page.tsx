@@ -9,7 +9,7 @@ import { ChevronDown, ChevronRight, FolderKanban, Loader2 } from 'lucide-react';
 interface ProjectItem { id: string; name: string; description: string | null; status: string; start_date: string | null; end_date: string | null }
 interface TaskItem { id: string; title: string; status: string; priority: string; due_date: string | null; project_id: string | null }
 
-const TASK_STATUSES = ['todo', 'in_progress', 'done'];
+const TASK_STATUSES = ['todo', 'in_progress', 'submitted', 'completed'];
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
@@ -97,7 +97,7 @@ export default function ProjectsPage() {
         ) : (
           projects.map((project) => {
             const tasks = tasksByProject[project.id] ?? [];
-            const done = tasks.filter((t) => t.status === 'done').length;
+            const done = tasks.filter((t) => t.status === 'completed').length;
             const progress = tasks.length > 0 ? Math.round((done / tasks.length) * 100) : 0;
             const isOpen = expanded.has(project.id);
             return (
@@ -140,7 +140,7 @@ export default function ProjectsPage() {
                             className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 capitalize bg-slate-50"
                           >
                             {TASK_STATUSES.map((s) => (
-                              <option key={s} value={s} className="capitalize">{s.replace('_', ' ')}</option>
+                              <option key={s} value={s} className="capitalize">{s.replace(/_/g, ' ')}</option>
                             ))}
                           </select>
                         </div>

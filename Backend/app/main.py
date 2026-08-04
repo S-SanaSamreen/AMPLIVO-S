@@ -187,3 +187,18 @@ async def _db_health(db: AsyncSession) -> JSONResponse:
             "latency_ms": round(latency_ms, 2),
         },
     )
+
+
+@app.get("/metrics", tags=["Health"], summary="Application metrics")
+async def metrics() -> JSONResponse:
+    """Basic metrics for monitoring."""
+    import os
+    import psutil
+    process = psutil.Process(os.getpid())
+    memory_info = process.memory_info()
+    return JSONResponse(
+        content={
+            "memory_usage_mb": round(memory_info.rss / (1024 * 1024), 2),
+            "cpu_percent": process.cpu_percent(),
+        }
+    )

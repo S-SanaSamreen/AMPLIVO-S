@@ -29,3 +29,4 @@ brotli==1.1.0
 
 # Faster JSON serialization (uvicorn detects and uses automatically)
 orjson==3.10.7
+psutil==6.1.0

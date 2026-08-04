@@ -88,7 +88,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <main id="main-content" className="min-h-screen flex">
       {/* Left — Form */}
       <div className="flex-1 flex items-center justify-center px-6 bg-white">
         <div className="w-full max-w-md">
@@ -102,16 +102,21 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {registerError && (
-              <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl border border-red-200">
+              <div role="alert" aria-live="assertive" className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl border border-red-200">
                 {registerError}
               </div>
             )}
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name <span className="text-red-500">*</span></label>
+              <label htmlFor="reg-full-name" className="block text-sm font-medium text-slate-700 mb-1.5">Full Name <span className="text-red-500" aria-hidden="true">*</span></label>
               <input
+                id="reg-full-name"
                 type="text"
                 {...register('full_name')}
+                autoComplete="name"
+                aria-required="true"
+                aria-invalid={!!errors.full_name}
+                aria-describedby={errors.full_name ? 'reg-full-name-error' : undefined}
                 className={`w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4C1D95]/20 focus:border-[#4C1D95] ${
                   errors.full_name ? 'border-red-300' : 'border-slate-200'
                 }`}
@@ -119,41 +124,56 @@ export default function RegisterPage() {
                 pattern="[A-Za-z\s]+"
                 title="Only letters and spaces are allowed"
               />
-              {errors.full_name && <p className="text-red-500 text-xs mt-1.5">{errors.full_name.message}</p>}
+              {errors.full_name && <p id="reg-full-name-error" role="alert" className="text-red-500 text-xs mt-1.5">{errors.full_name.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address <span className="text-red-500">*</span></label>
+              <label htmlFor="reg-email" className="block text-sm font-medium text-slate-700 mb-1.5">Email Address <span className="text-red-500" aria-hidden="true">*</span></label>
               <input
+                id="reg-email"
                 type="email"
                 {...register('email')}
+                autoComplete="email"
+                aria-required="true"
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? 'reg-email-error' : undefined}
                 className={`w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4C1D95]/20 focus:border-[#4C1D95] ${
                   errors.email ? 'border-red-300' : 'border-slate-200'
                 }`}
                 placeholder="john@example.com"
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1.5">{errors.email.message}</p>}
+              {errors.email && <p id="reg-email-error" role="alert" className="text-red-500 text-xs mt-1.5">{errors.email.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Username <span className="text-red-500">*</span></label>
+              <label htmlFor="reg-username" className="block text-sm font-medium text-slate-700 mb-1.5">Username <span className="text-red-500" aria-hidden="true">*</span></label>
               <input
+                id="reg-username"
                 type="text"
                 {...register('username')}
+                autoComplete="username"
+                aria-required="true"
+                aria-invalid={!!errors.username}
+                aria-describedby={errors.username ? 'reg-username-error' : undefined}
                 className={`w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4C1D95]/20 focus:border-[#4C1D95] ${
                   errors.username ? 'border-red-300' : 'border-slate-200'
                 }`}
                 placeholder="john_doe"
               />
-              {errors.username && <p className="text-red-500 text-xs mt-1.5">{errors.username.message}</p>}
+              {errors.username && <p id="reg-username-error" role="alert" className="text-red-500 text-xs mt-1.5">{errors.username.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Password <span className="text-red-500">*</span></label>
+              <label htmlFor="reg-password" className="block text-sm font-medium text-slate-700 mb-1.5">Password <span className="text-red-500" aria-hidden="true">*</span></label>
               <div className="relative">
                 <input
+                  id="reg-password"
                   type={showPassword ? 'text' : 'password'}
                   {...register('password')}
+                  autoComplete="new-password"
+                  aria-required="true"
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? 'reg-password-error' : undefined}
                   className={`w-full border rounded-xl px-4 py-3 text-sm pr-11 focus:outline-none focus:ring-2 focus:ring-[#4C1D95]/20 focus:border-[#4C1D95] ${
                     errors.password ? 'border-red-300' : 'border-slate-200'
                   }`}
@@ -162,25 +182,31 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={16} aria-hidden="true" /> : <Eye size={16} aria-hidden="true" />}
                 </button>
               </div>
-              {errors.password && <p className="text-red-500 text-xs mt-1.5">{errors.password.message}</p>}
+              {errors.password && <p id="reg-password-error" role="alert" className="text-red-500 text-xs mt-1.5">{errors.password.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Confirm Password <span className="text-red-500">*</span></label>
+              <label htmlFor="reg-confirm-password" className="block text-sm font-medium text-slate-700 mb-1.5">Confirm Password <span className="text-red-500" aria-hidden="true">*</span></label>
               <input
+                id="reg-confirm-password"
                 type="password"
                 {...register('confirmPassword')}
+                autoComplete="new-password"
+                aria-required="true"
+                aria-invalid={!!errors.confirmPassword}
+                aria-describedby={errors.confirmPassword ? 'reg-confirm-password-error' : undefined}
                 className={`w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4C1D95]/20 focus:border-[#4C1D95] ${
                   errors.confirmPassword ? 'border-red-300' : 'border-slate-200'
                 }`}
                 placeholder="Confirm your password"
               />
-              {errors.confirmPassword && <p className="text-red-500 text-xs mt-1.5">{errors.confirmPassword.message}</p>}
+              {errors.confirmPassword && <p id="reg-confirm-password-error" role="alert" className="text-red-500 text-xs mt-1.5">{errors.confirmPassword.message}</p>}
             </div>
 
             <div className="pt-4">
@@ -239,6 +265,4 @@ export default function RegisterPage() {
           ))}
         </div>
       </div>
-    </div>
-  );
-}
+    </main>

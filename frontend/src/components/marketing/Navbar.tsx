@@ -79,6 +79,13 @@ export function Navbar({ alwaysSolid = false }: NavbarProps) {
                 className="relative shrink-0"
                 onMouseEnter={() => link.children && setActiveDropdown(link.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
+                onFocus={() => link.children && setActiveDropdown(link.label)}
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                    setActiveDropdown(null);
+                  }
+                }}
+                onKeyDown={(e) => { if (e.key === 'Escape') setActiveDropdown(null); }}
               >
                 <Link
                   href={link.href}
@@ -111,11 +118,12 @@ export function Navbar({ alwaysSolid = false }: NavbarProps) {
 
                 {/* Dropdown */}
                 {link.children && dropdownOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-2xl border border-slate-100 shadow-xl shadow-black/10 p-2 z-50" aria-label={`${link.label} submenu`}>
+                  <div role="menu" className="absolute top-full left-0 mt-1 w-64 bg-white rounded-2xl border border-slate-100 shadow-xl shadow-black/10 p-2 z-50" aria-label={`${link.label} submenu`}>
                     {link.children.map((child) => (
                       <Link
                         key={child.label}
                         href={child.href}
+                        role="menuitem"
                         aria-current={isActive(child.href) ? 'page' : undefined}
                         className={`flex items-center px-4 py-2.5 rounded-xl text-sm transition-colors ${
                           isActive(child.href)
@@ -144,6 +152,15 @@ export function Navbar({ alwaysSolid = false }: NavbarProps) {
           >
             Client Login
           </Link>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-menu"
+            className={`lg:hidden p-2 rounded-lg transition-colors ${isSolid ? 'text-slate-700 hover:bg-slate-100' : 'text-white hover:bg-white/10'}`}
+          >
+            {mobileOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+          </button>
         </div>
       </div>
 

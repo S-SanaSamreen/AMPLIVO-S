@@ -80,18 +80,18 @@ export default function LoginPage() {
   const setDemoCredentials = (role: 'client' | 'admin' | 'sales' | 'hr' | 'employee' | 'crm') => {
     setValue('email', role === 'crm' ? 'crm@amplivo.in' : `${role}@amplivo.in`);
     const passwords: Record<string, string> = {
-      admin: 'Admin@123',
-      client: 'Client@123',
-      sales: 'Sales@123',
-      hr: 'Hr@12345',
-      employee: 'Employee@123',
-      crm: 'Crm@1234',
+      admin: process.env.NEXT_PUBLIC_DEMO_ADMIN_PASSWORD ?? '',
+      client: process.env.NEXT_PUBLIC_DEMO_CLIENT_PASSWORD ?? '',
+      sales: process.env.NEXT_PUBLIC_DEMO_SALES_PASSWORD ?? '',
+      hr: process.env.NEXT_PUBLIC_DEMO_HR_PASSWORD ?? '',
+      employee: process.env.NEXT_PUBLIC_DEMO_EMPLOYEE_PASSWORD ?? '',
+      crm: process.env.NEXT_PUBLIC_DEMO_CRM_PASSWORD ?? '',
     };
     setValue('password', passwords[role]);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-[#F8F9FA]">
+    <main id="main-content" className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-[#F8F9FA]">
       {/* Vibrant Premium Background Mesh */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] max-w-[800px] max-h-[800px] bg-gradient-to-br from-[#4C1D95]/40 to-[#7C3AED]/40 rounded-full blur-[100px]" />
@@ -161,30 +161,40 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {loginError && (
-            <div className="bg-red-50 text-red-600 text-[13px] px-3 py-2 rounded-lg border border-red-100 text-center">
+            <div role="alert" aria-live="assertive" className="bg-red-50 text-red-600 text-[13px] px-3 py-2 rounded-lg border border-red-100 text-center">
               {loginError}
             </div>
           )}
           
           <div className="space-y-1">
-            <label className="block text-[13px] font-medium text-slate-700">Email <span className="text-red-500">*</span></label>
+            <label htmlFor="login-email" className="block text-[13px] font-medium text-slate-700">Email <span className="text-red-500" aria-hidden="true">*</span></label>
             <input
+              id="login-email"
               type="email"
               placeholder="you@company.com"
+              autoComplete="email"
+              aria-required="true"
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? 'login-email-error' : undefined}
               {...register('email')}
               className={`w-full bg-white border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#4C1D95] focus:border-[#4C1D95] transition-shadow shadow-sm ${
                 errors.email ? 'border-red-300' : 'border-slate-200'
               }`}
             />
-            {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
+            {errors.email && <p id="login-email-error" role="alert" className="text-red-500 text-xs">{errors.email.message}</p>}
           </div>
           
           <div className="space-y-1">
-            <label className="block text-[13px] font-medium text-slate-700">Password <span className="text-red-500">*</span></label>
+            <label htmlFor="login-password" className="block text-[13px] font-medium text-slate-700">Password <span className="text-red-500" aria-hidden="true">*</span></label>
             <div className="relative">
               <input
+                id="login-password"
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
+                autoComplete="current-password"
+                aria-required="true"
+                aria-invalid={!!errors.password}
+                aria-describedby={errors.password ? 'login-password-error' : undefined}
                 {...register('password')}
                 className={`w-full bg-white border rounded-lg px-3 py-2.5 text-sm pr-9 focus:outline-none focus:ring-1 focus:ring-[#4C1D95] focus:border-[#4C1D95] transition-shadow shadow-sm ${
                   errors.password ? 'border-red-300' : 'border-slate-200'
@@ -193,17 +203,18 @@ export default function LoginPage() {
               <button 
                 type="button" 
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
-                {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                {showPassword ? <EyeOff size={14} aria-hidden="true" /> : <Eye size={14} aria-hidden="true" />}
               </button>
             </div>
-            {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
+            {errors.password && <p id="login-password-error" role="alert" className="text-red-500 text-xs">{errors.password.message}</p>}
           </div>
 
           <div className="flex items-center justify-between text-[13px] pt-1 pb-2">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" {...register('rememberMe')} className="rounded border-slate-300 text-[#4C1D95] focus:ring-[#4C1D95]" />
+            <label htmlFor="login-remember" className="flex items-center gap-2 cursor-pointer">
+              <input id="login-remember" type="checkbox" {...register('rememberMe')} className="rounded border-slate-300 text-[#4C1D95] focus:ring-[#4C1D95]" />
               <span className="text-slate-600">Remember me</span>
             </label>
             <Link href="/forgot-password" className="text-[#4C1D95] font-medium hover:underline">
@@ -225,6 +236,4 @@ export default function LoginPage() {
         </form>
 
       </div>
-    </div>
-  );
-}
+    </main>

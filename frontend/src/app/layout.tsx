@@ -48,7 +48,9 @@ export default function RootLayout({
           Skip to main content
         </a>
         <ScrollToTop />
-        <PageTransition>{children}</PageTransition>
+        <PageTransition>
+          <main id="main-content">{children}</main>
+        </PageTransition>
         <Toaster />
       </body>
     </html>
