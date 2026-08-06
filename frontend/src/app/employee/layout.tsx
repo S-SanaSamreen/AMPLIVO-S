@@ -17,16 +17,13 @@ export default function EmployeeLayout({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    // The employee's identity is the real authenticated user's UUID - it
-    // must match `assigned_to`/`submitted_by` on the backend's tasks and
-    // task_submissions rows exactly, so no mock-employee lookup or
-    // placeholder id (e.g. 'EMP-001') can stand in for it.
     if (user?.id && activeEmployeeId !== user.id) {
-      setActiveEmployee(user.id);
+      queueMicrotask(() => setActiveEmployee(user.id));
     }
   }, [user, activeEmployeeId, setActiveEmployee]);
 

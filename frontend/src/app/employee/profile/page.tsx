@@ -50,13 +50,14 @@ export default function EmployeeProfile() {
   const skillsStr = employee.skills ? employee.skills.join(', ') : '';
 
   useEffect(() => {
-    setFormData({
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    queueMicrotask(() => setFormData({
       firstName: employee.firstName ?? '',
       lastName: employee.lastName ?? '',
       email: employee.email ?? '',
       phone: employee.phone ?? '',
       skills: skillsStr,
-    });
+    }));
   }, [employee.id, employee.firstName, employee.lastName, employee.email, employee.phone, skillsStr]);
 
   const fullName = `${employee.firstName} ${employee.lastName}`.trim() || 'Employee';

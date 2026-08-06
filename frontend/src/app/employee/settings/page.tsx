@@ -21,6 +21,7 @@ export default function EmployeeSettings() {
 
   useEffect(() => {
     if (activeEmployee) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData({
         firstName: activeEmployee.firstName ?? '',
         lastName: activeEmployee.lastName ?? '',

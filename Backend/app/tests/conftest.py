@@ -6,6 +6,7 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
+from app.core.config import settings
 from app.db.base import Base
 from app.dependencies.db import get_db
 from app.main import app
@@ -47,6 +48,11 @@ def _reset_rate_limiter() -> None:
 @pytest.fixture(autouse=True)
 def _reset_email_outbox() -> None:
     clear_outbox()
+
+
+@pytest.fixture(autouse=True)
+def _force_email_outbox() -> None:
+    settings.BREVO_API_KEY = None
 
 
 @pytest_asyncio.fixture

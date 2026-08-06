@@ -73,6 +73,7 @@ export default function AdminRoles() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchRoles();
     fetchPermissions();
   }, [fetchRoles, fetchPermissions]);
@@ -93,6 +94,7 @@ export default function AdminRoles() {
 
   useEffect(() => {
     if (selectedRoleId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       selectRole(selectedRoleId);
     }
   }, [selectedRoleId]);

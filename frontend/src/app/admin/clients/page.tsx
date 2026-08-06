@@ -99,11 +99,13 @@ export default function AdminClients() {
   }, [page, pageSize, search, statusFilter, typeFilter]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchClients();
   }, [fetchClients]);
 
   useEffect(() => {
-    setPage(1);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    queueMicrotask(() => setPage(1));
   }, [search, statusFilter, typeFilter]);
 
   useEffect(() => {

@@ -105,7 +105,9 @@ export default function AdminSocialCalendar() {
     }
   }, [selectedProfileId, profiles]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchProfiles(); }, [fetchProfiles]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchPosts(); }, [fetchPosts]);
 
   const handleCreate = async (e: React.FormEvent) => {

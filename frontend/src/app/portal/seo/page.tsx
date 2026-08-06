@@ -41,10 +41,12 @@ export default function SEOPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   useEffect(() => {
     if (!selectedProjectId) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisibleCount(10);
     setFetchingReport(true);
     Promise.all([

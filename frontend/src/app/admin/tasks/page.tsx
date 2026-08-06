@@ -89,6 +89,7 @@ export default function AdminTasks() {
     }
   }, [page, search, statusFilter, priorityFilter]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchTasks(); }, [fetchTasks]);
 
   useEffect(() => {
@@ -103,6 +104,7 @@ export default function AdminTasks() {
     }
   }, [showModal]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setPage(1); }, [search, statusFilter, priorityFilter]);
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));

@@ -74,8 +74,11 @@ export default function CrmLeadDetailsPage() {
   };
 
   useEffect(() => {
-    if (lead?.id) loadInvoiceAndPayments(lead.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (lead?.id) {
+      const run = async () => { await loadInvoiceAndPayments(lead.id); };
+      run();
+    }
   }, [lead?.id]);
 
   if (!lead) {

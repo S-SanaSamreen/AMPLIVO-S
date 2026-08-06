@@ -85,8 +85,10 @@ export default function AdminProjects() {
     }
   }, [page, search, statusFilter]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchProjects(); }, [fetchProjects]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setPage(1); }, [search, statusFilter]);
 
   useEffect(() => {

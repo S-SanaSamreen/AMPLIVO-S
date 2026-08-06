@@ -37,7 +37,8 @@ export default function InvoicesPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   const pendingInvoices = invoices.filter((inv) => ['sent', 'draft', 'overdue', 'Pending', 'Unpaid', 'Overdue'].includes(inv.status));
   const paidInvoices = invoices.filter((inv) => ['paid', 'Paid', 'Completed'].includes(inv.status));

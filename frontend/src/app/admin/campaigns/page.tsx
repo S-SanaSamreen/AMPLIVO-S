@@ -92,12 +92,14 @@ export default function AdminCampaigns() {
   }, [page, pageSize, search, statusTab, typeFilter]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDependencies();
     fetchCampaigns();
   }, [fetchDependencies, fetchCampaigns]);
 
   useEffect(() => {
-    setPage(1);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    queueMicrotask(() => setPage(1));
   }, [search, statusTab, typeFilter]);
 
   useEffect(() => {

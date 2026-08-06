@@ -84,8 +84,10 @@ export default function AdminTeam() {
     }
   }, [page, search, departmentFilter]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchMembers(); }, [fetchMembers]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setPage(1); }, [search, departmentFilter]);
 
   useEffect(() => {

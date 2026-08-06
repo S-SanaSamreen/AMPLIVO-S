@@ -47,7 +47,8 @@ export default function AnalyticsPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   const filteredCampaigns = useMemo(() => campaigns.filter((c) => withinRange(c.start_date ?? c.created_at, range)), [campaigns, range]);
   const filteredLeads = useMemo(() => leads.filter((l) => withinRange(l.created_at, range)), [leads, range]);

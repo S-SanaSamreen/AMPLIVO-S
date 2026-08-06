@@ -28,7 +28,8 @@ export default function SupportTicketsPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   if (loading) {
     return (

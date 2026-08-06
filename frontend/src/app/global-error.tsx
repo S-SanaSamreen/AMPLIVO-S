@@ -1,6 +1,8 @@
 'use client';
 export const dynamic = 'force-dynamic';
 
+import Link from 'next/link';
+
 export default function GlobalError({
   error,
   reset,
@@ -29,7 +31,7 @@ export default function GlobalError({
               className="rounded-xl border border-slate-200 px-6 py-3 text-sm font-medium text-slate-700 transition-colors hover:border-[#4C1D95] hover:text-[#4C1D95]"
             >
               Return Home
-            </a>
+            </Link>
           </div>
         </div>
       </body>

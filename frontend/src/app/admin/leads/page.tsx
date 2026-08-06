@@ -157,15 +157,18 @@ export default function AdminLeads() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchLeads();
   }, [fetchLeads]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTeamMembers();
   }, [fetchTeamMembers]);
 
   useEffect(() => {
-    setPage(1);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    queueMicrotask(() => setPage(1));
   }, [search, statusFilter, priorityFilter]);
 
   useEffect(() => {

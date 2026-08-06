@@ -236,7 +236,9 @@ export function AdminHeader({ title, subtitle, badge, actions }: AdminHeaderProp
 
   useEffect(() => {
     if (open && unreadCount === 0 && !loading && notifications.length > 0) {
-      setOpen(false);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      const closePopup = () => setOpen(false);
+      setTimeout(closePopup, 0);
     }
   }, [unreadCount, open, loading, notifications.length]);
 

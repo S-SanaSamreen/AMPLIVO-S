@@ -32,7 +32,8 @@ export default function PortalCampaigns() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, [page, statusFilter]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, [page, statusFilter]);
 
   useEffect(() => {
     const t = setTimeout(() => {

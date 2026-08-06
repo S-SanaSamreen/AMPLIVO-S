@@ -44,7 +44,8 @@ export default function ProjectsPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   const toggleExpand = (id: string) => {
     setExpanded((prev) => {

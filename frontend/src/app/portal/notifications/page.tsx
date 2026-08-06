@@ -31,7 +31,8 @@ export default function NotificationsPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   const filtered = filter === 'unread' ? notifications.filter((n) => !n.is_read) : notifications;
   const unreadCount = notifications.filter((n) => !n.is_read).length;

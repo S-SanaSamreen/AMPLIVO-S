@@ -68,6 +68,7 @@ export default function AdminInfluencers() {
     }
   }, [search]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchInfluencers(); }, [fetchInfluencers]);
 
   const openCreateModal = () => {

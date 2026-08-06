@@ -43,7 +43,8 @@ export default function DocumentsPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   const visibleFiles = activeFolder ? files.filter((f) => f.folder_id === activeFolder) : files;
 

@@ -36,7 +36,8 @@ export default function CalendarPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();

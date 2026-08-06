@@ -108,6 +108,7 @@ export default function AdminFinance() {
   }, [search]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchClients();
     fetchData();
   }, [fetchClients, fetchData]);

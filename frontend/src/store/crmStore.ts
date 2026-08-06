@@ -165,7 +165,7 @@ const generateCreds = (lead: CrmLead): CrmCredentials => {
 // shape (services, milestones, budgetINR, assignedEmployeeIds, ...) is not all
 // present on the wire, so it must be filled in here with real defaults instead
 // of being assumed to exist on the raw API payload.
-const mapBackendProject = (raw: Record<string, any>, clients: CrmClient[]): CrmProject => {
+const mapBackendProject = (raw: Record<string, unknown>, clients: CrmClient[]): CrmProject => {
   const client = clients.find(c => c.id === raw.client_id);
   return {
     id: raw.id || '',
@@ -197,7 +197,7 @@ const mapBackendProject = (raw: Record<string, any>, clients: CrmClient[]): CrmP
 // the CRM/Employee UI's richer CrmTask shape (projectName, service,
 // assignedEmployeeId, comments, workingFiles, ...) is not on the wire and
 // must be filled in here instead of assumed present on the raw payload.
-const mapBackendTask = (raw: Record<string, any>, projects: CrmProject[]): CrmTask => {
+const mapBackendTask = (raw: Record<string, unknown>, projects: CrmProject[]): CrmTask => {
   const project = projects.find(p => p.id === raw.project_id);
   return {
     id: raw.id || '',
@@ -232,7 +232,7 @@ const mapBackendSubmissionStatus = (status: string | null | undefined): Submissi
   return 'PENDING_CRM_REVIEW';
 };
 
-const mapBackendSubmission = (raw: Record<string, any>, task: CrmTask | undefined): CrmSubmission => {
+const mapBackendSubmission = (raw: Record<string, unknown>, task: CrmTask | undefined): CrmSubmission => {
   const status = mapBackendSubmissionStatus(raw.status);
   return {
     id: raw.id || '',
@@ -296,7 +296,7 @@ const mapBackendPaymentStatus = (status: string | null | undefined): CrmPayment[
 // reuse it (as *already-mapped* CrmLead[]) when mapping clients/invoices,
 // instead of every consumer re-deriving contact name/email/services from
 // raw Lead fields independently.
-const mapBackendLead = (l: Record<string, any>): CrmLead => ({
+const mapBackendLead = (l: Record<string, unknown>): CrmLead => ({
   id: l.id || '',
   salesLead: {
     id: l.id || '',
@@ -356,18 +356,18 @@ const CLIENT_STATUS_MAP: Record<string, ClientStatus> = {
   active: 'Active', onboarding: 'Onboarding', churned: 'Churned',
   inactive: 'Churned', on_hold: 'On Hold', renewal_due: 'Renewal Due',
 };
-const mapBackendClientStatus = (raw: Record<string, any>): ClientStatus => {
+const mapBackendClientStatus = (raw: Record<string, unknown>): ClientStatus => {
   const mapped = CLIENT_STATUS_MAP[String(raw.status || '').toLowerCase()];
   if (mapped) return mapped;
   return raw.is_active === false ? 'Churned' : 'Active';
 };
 
-const mapBackendClient = (raw: Record<string, any>, leads: CrmLead[], invoices: CrmInvoice[]): CrmClient => {
+const mapBackendClient = (raw: Record<string, unknown>, leads: CrmLead[], invoices: CrmInvoice[]): CrmClient => {
   // The lead this client was converted from (if any) - the real source of
   // the original contact person's name/services, since Client itself only
   // stores a company-level email/phone, not a named individual.
   const lead = leads.find(l => l.convertedToClientId === raw.id);
-  const rawContacts: Array<Record<string, any>> = raw.contacts || [];
+  const rawContacts: Array<Record<string, unknown>> = raw.contacts || [];
   const primaryContact = rawContacts.find(c => c.is_primary) || rawContacts[0];
   const contactFullName: string = primaryContact?.name
     || (lead ? `${lead.salesLead.firstName} ${lead.salesLead.lastName}`.trim() : '');
@@ -422,7 +422,7 @@ const mapBackendClient = (raw: Record<string, any>, leads: CrmLead[], invoices: 
 // total_amount/issue_date/status - the CRM invoices page reads
 // invoiceNumber/grandTotal/issueDate/crmStatus, which were always undefined,
 // crashing on `invoice.grandTotal.toLocaleString()` for every real invoice.
-const mapBackendInvoiceStatus = (raw: Record<string, any>): CrmInvoiceStatus => {
+const mapBackendInvoiceStatus = (raw: Record<string, unknown>): CrmInvoiceStatus => {
   const status = String(raw.status || '').toUpperCase();
   const dueDate = raw.due_date ? new Date(raw.due_date) : null;
   const isSettled = status === 'ADVANCE_PAID' || status === 'FINAL_PAID' || status === 'PAID';
@@ -435,7 +435,7 @@ const mapBackendInvoiceStatus = (raw: Record<string, any>): CrmInvoiceStatus => 
   return 'Sent'; // CRM_APPROVED, EMAIL_SENT, SENT, or any other in-flight state
 };
 
-const mapBackendInvoice = (raw: Record<string, any>, clients: CrmClient[], leads: CrmLead[]): CrmInvoice => {
+const mapBackendInvoice = (raw: Record<string, unknown>, clients: CrmClient[], leads: CrmLead[]): CrmInvoice => {
   const client = clients.find(c => c.id === raw.client_id);
   const lead = leads.find(l => l.id === raw.lead_id);
   const clientName = client
@@ -479,7 +479,7 @@ const mapBackendInvoice = (raw: Record<string, any>, clients: CrmClient[], leads
 // workloadPercent/availability had no backend equivalent at all and were
 // pure mock fabrications - derived here from real assigned-task counts instead.
 const mapBackendEmployee = (
-  u: Record<string, any>, rolesById: Map<string, string>, projects: CrmProject[], tasks: CrmTask[],
+  u: Record<string, unknown>, rolesById: Map<string, string>, projects: CrmProject[], tasks: CrmTask[],
 ): CrmEmployee => {
   const fullName: string = u.full_name || '';
   const nameParts = fullName.trim() ? fullName.trim().split(' ') : [];
@@ -530,7 +530,7 @@ const inferNotificationType = (title: string): CrmNotification['type'] => {
   return 'reminder';
 };
 
-const mapBackendNotification = (raw: Record<string, any>): CrmNotification => {
+const mapBackendNotification = (raw: Record<string, unknown>): CrmNotification => {
   const created = raw.created_at ? new Date(raw.created_at) : new Date();
   return {
     id: raw.id || '',
@@ -596,10 +596,10 @@ export const useCrmStore = create<CrmState>()(
           ]);
 
           const projects = projectsRes.status === 'fulfilled'
-            ? (projectsRes.value.items || projectsRes.value || []).map((p: Record<string, any>) => mapBackendProject(p, get().clients))
+            ? (projectsRes.value.items || projectsRes.value || []).map((p: Record<string, unknown>) => mapBackendProject(p, get().clients))
             : get().projects;
           const tasks = tasksRes.status === 'fulfilled'
-            ? (tasksRes.value.items || tasksRes.value || []).map((t: Record<string, any>) => mapBackendTask(t, projects))
+            ? (tasksRes.value.items || tasksRes.value || []).map((t: Record<string, unknown>) => mapBackendTask(t, projects))
             : get().tasks;
           const notifications = notifRes.status === 'fulfilled'
             ? (notifRes.value.items || notifRes.value || []).map(mapBackendNotification)
@@ -640,7 +640,7 @@ export const useCrmStore = create<CrmState>()(
           const rawClients = res.items || res || [];
           const leads = get().leads;
           const invoices = get().invoices;
-          set({ clients: rawClients.map((raw: Record<string, any>) => mapBackendClient(raw, leads, invoices)) });
+          set({ clients: rawClients.map((raw: Record<string, unknown>) => mapBackendClient(raw, leads, invoices)) });
         } catch { /* keep existing */ }
       },
 
@@ -648,7 +648,7 @@ export const useCrmStore = create<CrmState>()(
         try {
           const res = await projectService.getAll({ page_size: 100 });
           const raw = res.items || res || [];
-          set({ projects: raw.map((p: Record<string, any>) => mapBackendProject(p, get().clients)) });
+          set({ projects: raw.map((p: Record<string, unknown>) => mapBackendProject(p, get().clients)) });
         } catch { /* keep existing */ }
       },
 
@@ -660,10 +660,10 @@ export const useCrmStore = create<CrmState>()(
           ]);
           const users = usersRes.status === 'fulfilled' ? (usersRes.value.items || usersRes.value || []) : [];
           const roles = rolesRes.status === 'fulfilled' ? (rolesRes.value.items || rolesRes.value || []) : [];
-          const rolesById = new Map<string, string>(roles.map((r: Record<string, any>) => [r.id, r.name || r.slug || '']));
+          const rolesById = new Map<string, string>(roles.map((r: Record<string, unknown>) => [r.id, r.name || r.slug || '']));
           const projects = get().projects;
           const tasks = get().tasks;
-          set({ employees: users.map((u: Record<string, any>) => mapBackendEmployee(u, rolesById, projects, tasks)) });
+          set({ employees: users.map((u: Record<string, unknown>) => mapBackendEmployee(u, rolesById, projects, tasks)) });
         } catch { /* keep existing */ }
       },
 
@@ -671,7 +671,7 @@ export const useCrmStore = create<CrmState>()(
         try {
           const res = await taskService.getAll({ page_size: 100 });
           const raw = res.items || res || [];
-          set({ tasks: raw.map((t: Record<string, any>) => mapBackendTask(t, get().projects)) });
+          set({ tasks: raw.map((t: Record<string, unknown>) => mapBackendTask(t, get().projects)) });
         } catch { /* keep existing */ }
       },
 
@@ -688,7 +688,7 @@ export const useCrmStore = create<CrmState>()(
           const submissions: CrmSubmission[] = [];
           results.forEach((r, i) => {
             if (r.status === 'fulfilled') {
-              const raw = (r.value.items || r.value || []) as Record<string, any>[];
+              const raw = (r.value.items || r.value || []) as Record<string, unknown>[];
               raw.forEach((s) => submissions.push(mapBackendSubmission(s, tasks[i])));
             }
           });
@@ -702,7 +702,7 @@ export const useCrmStore = create<CrmState>()(
           const raw = res.items || res || [];
           const clients = get().clients;
           const leads = get().leads;
-          set({ invoices: raw.map((i: Record<string, any>) => mapBackendInvoice(i, clients, leads)) });
+          set({ invoices: raw.map((i: Record<string, unknown>) => mapBackendInvoice(i, clients, leads)) });
         } catch { /* keep existing */ }
       },
 
@@ -720,7 +720,7 @@ export const useCrmStore = create<CrmState>()(
           const invoicesById = new Map(invoices.map(inv => [inv.id, inv]));
 
           const res = await financeService.getAllPayments({ page_size: 100 });
-          const rawPayments = (res.items || res || []) as Record<string, any>[];
+          const rawPayments = (res.items || res || []) as Record<string, unknown>[];
 
           const merged: CrmPayment[] = rawPayments.map((p) => {
             const inv = invoicesById.get(p.invoice_id);

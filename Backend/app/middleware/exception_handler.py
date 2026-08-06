@@ -98,7 +98,17 @@ def register_exception_handlers(app: FastAPI) -> None:
             extra["request_id"] = rid
         if cid:
             extra["correlation_id"] = cid
+        
         logger.exception("Unhandled exception", extra=extra)
+        
+        # Trigger PagerDuty/Slack alert for 500s
+        from app.core.alerting import fire_alert_background
+        fire_alert_background(
+            title="CRITICAL: Unhandled 500 Internal Server Error", 
+            message=str(exc), 
+            extra=extra
+        )
+
         content: dict = {
             "error_code": "internal_error",
             "message": "An unexpected error occurred.",

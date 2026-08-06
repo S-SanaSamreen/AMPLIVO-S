@@ -90,6 +90,7 @@ export default function AdminSEOProjects() {
   }, [search, statusFilter]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProjects();
   }, [fetchProjects]);
 

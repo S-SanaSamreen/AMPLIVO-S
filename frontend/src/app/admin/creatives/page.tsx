@@ -70,6 +70,7 @@ export default function AdminCreatives() {
     }
   }, [search, statusFilter]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchProjects(); }, [fetchProjects]);
 
   const handleCreate = async (e: React.FormEvent) => {

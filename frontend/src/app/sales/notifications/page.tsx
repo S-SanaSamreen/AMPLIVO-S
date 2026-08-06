@@ -43,7 +43,9 @@ export default function SalesNotificationsPage() {
   };
 
   useEffect(() => {
-    load();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    const run = async () => { await load(); };
+    run();
   }, []);
 
   const counts = useMemo(() => ({

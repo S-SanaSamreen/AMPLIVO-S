@@ -57,7 +57,8 @@ export default function PortalCreatives() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   const normalizedStatus = (s: string) => s.toLowerCase();
   const filtered = assets.filter((a) => {

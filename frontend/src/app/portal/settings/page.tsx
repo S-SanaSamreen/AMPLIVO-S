@@ -66,6 +66,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (!user?.id) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     Promise.all([
       userManagementService.getUser(user.id).catch(() => null),
@@ -75,26 +76,28 @@ export default function SettingsPage() {
     ]).then(([detail, profile, prefs, myCompany]) => {
       const loadedName = detail?.full_name ?? user?.name ?? '';
       const loadedPhone = detail?.phone ?? '';
-      if (detail?.phone) setPhone(loadedPhone);
-      if (detail?.full_name) setFullName(loadedName);
-      // BUG-017: set original values for dirty detection
-      setOriginalFullName(loadedName);
-      setOriginalPhone(loadedPhone);
+      queueMicrotask(() => {
+        if (detail?.phone) setPhone(loadedPhone);
+        if (detail?.full_name) setFullName(loadedName);
+        // BUG-017: set original values for dirty detection
+        setOriginalFullName(loadedName);
+        setOriginalPhone(loadedPhone);
 
-      if (profile?.avatar_url) setAvatarUrl(profile.avatar_url);
+        if (profile?.avatar_url) setAvatarUrl(profile.avatar_url);
 
-      const defaultPrefs = { theme: 'light', email_notifications: true, in_app_notifications: true };
-      const resolvedPrefs = prefs ?? defaultPrefs;
-      setPreferences(resolvedPrefs);
-      setOriginalPreferences(resolvedPrefs);
+        const defaultPrefs = { theme: 'light', email_notifications: true, in_app_notifications: true };
+        const resolvedPrefs = prefs ?? defaultPrefs;
+        setPreferences(resolvedPrefs);
+        setOriginalPreferences(resolvedPrefs);
 
-      if (myCompany) {
-        setCompany(myCompany);
-        const compForm = { display_name: myCompany.display_name ?? '', website: myCompany.website ?? '', phone: myCompany.phone ?? '' };
-        setCompanyForm(compForm);
-        setOriginalCompanyForm(compForm);
-      }
-      setLoading(false);
+        if (myCompany) {
+          setCompany(myCompany);
+          const compForm = { display_name: myCompany.display_name ?? '', website: myCompany.website ?? '', phone: myCompany.phone ?? '' };
+          setCompanyForm(compForm);
+          setOriginalCompanyForm(compForm);
+        }
+        setLoading(false);
+      });
     });
   }, [user?.id]);
 

@@ -37,7 +37,8 @@ export default function PaymentsPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { load(); }, []);
 
   const totalPaid = payments.filter((p) => p.status !== 'failed').reduce((sum, p) => sum + p.amount, 0);
   const totalInvoiced = invoices.reduce((sum, inv) => sum + (inv.total_amount || 0), 0);

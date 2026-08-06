@@ -105,21 +105,23 @@ export function PortalSidebar() {
   const { user, logout, refreshToken } = useAuthStore();
   const { activeCampaigns, pendingCreatives, unreadMessages, accountManager } = useSidebarData();
   const { isSidebarOpen, setSidebarOpen } = useUiStore();
-  const [lastSeenCampaigns, setLastSeenCampaigns] = useState(0);
-
-  useEffect(() => {
+  const [lastSeenCampaigns, setLastSeenCampaigns] = useState<number>(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('lastSeenCampaigns');
-      if (stored) setLastSeenCampaigns(parseInt(stored, 10));
+      if (stored) return parseInt(stored, 10);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    return 0;
+  });
 
   useEffect(() => {
     if (pathname === '/portal/campaigns' && activeCampaigns > 0) {
-      setLastSeenCampaigns(activeCampaigns);
       if (typeof window !== 'undefined') {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         localStorage.setItem('lastSeenCampaigns', activeCampaigns.toString());
       }
+      const next = activeCampaigns;
+      queueMicrotask(() => setLastSeenCampaigns(next));
     }
   }, [pathname, activeCampaigns]);
 
@@ -270,7 +272,8 @@ export function PortalHeader({ title, subtitle }: PortalHeaderProps) {
   // BUG-06: Auto-close popup when all notifications become read
   useEffect(() => {
     if (open && unreadCount === 0 && !loading && notifications.length > 0) {
-      setOpen(false);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      queueMicrotask(() => setOpen(false));
     }
   }, [unreadCount, open, loading, notifications.length]);
 

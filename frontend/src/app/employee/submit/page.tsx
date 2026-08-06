@@ -92,18 +92,18 @@ export default function EmployeeSubmitWork({ searchParams }: { searchParams: Pro
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   useEffect(() => {
     if (existingSub) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(existingSub.title);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setWorkSummary(existingSub.workSummary);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setDeliverableType(existingSub.deliverableType);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setUrl(existingSub.versions[0]?.externalUrl || '');
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setCompletionPercentage(existingSub.versions[0]?.completionPercentage ?? 100);
     }
   }, [existingSub]);

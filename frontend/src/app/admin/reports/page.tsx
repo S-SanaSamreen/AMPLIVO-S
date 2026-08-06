@@ -87,6 +87,7 @@ export default function AdminReports() {
   }, [search]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchClients();
     fetchReports();
   }, [fetchClients, fetchReports]);
@@ -94,6 +95,7 @@ export default function AdminReports() {
   // AMP-011: Fetch SEO projects when report type is 'SEO Audit'
   useEffect(() => {
     if (form.type === 'SEO Audit' && showModal && seoProjects.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSeoProjectsLoading(true);
       seoService.getProjects({ page_size: 100 })
         .then((res) => {

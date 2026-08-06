@@ -10,11 +10,13 @@ from app.services.email_service import get_outbox
 from app.services.token_cleanup_service import TokenCleanupService
 from app.utils.time import utc_now
 
+import uuid
+
 PAYLOAD = {
     "email": "cleanup.user@amplivo.com",
     "username": "cleanup_user",
     "full_name": "Cleanup User",
-    "password": "SecurePass123",
+    "password": f"Pass{uuid.uuid4().hex[:8]}!",
 }
 
 
