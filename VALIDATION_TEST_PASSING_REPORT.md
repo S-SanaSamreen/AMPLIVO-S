@@ -88,12 +88,6 @@
 | Backend (FastAPI/Pydantic) | 20+ | All PASS |
 | Frontend (React/Zod) | 50+ | All PASS |
 
-### Coverage Status
-
-```
-Backend:  ████████████░░░░  75% (schema + auth + enum validation covered)
-Frontend: ████████████████  100% (utility validations covered)
-```
 
 ### Notes
 - Backend tests cover schema validation via API integration tests
